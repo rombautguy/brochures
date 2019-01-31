@@ -31,7 +31,7 @@ var imgUrls = [
 ];
 
 
-function trim(str) {
+function trimColorStr(str) {
     return str.replace(/^\s+|\s+$/gm, '');
 }
 
@@ -40,10 +40,10 @@ function RGBAtoRGB(rgba) {
         return rgba
     }
     var parts = rgba.substring(rgba.indexOf("(")).split(","),
-        r = parseInt(trim(parts[0].substring(1)), 10),
-        g = parseInt(trim(parts[1]), 10),
-        b = parseInt(trim(parts[2]), 10),
-        a = parseFloat(trim(parts[3].substring(0, parts[3].length - 1))).toFixed(2);
+        r = parseInt(trimColorStr(parts[0].substring(1)), 10),
+        g = parseInt(trimColorStr(parts[1]), 10),
+        b = parseInt(trimColorStr(parts[2]), 10),
+        a = parseFloat(trimColorStr(parts[3].substring(0, parts[3].length - 1))).toFixed(2);
 
     if (a == 0) {
         return "rgb(255, 255, 255)"
@@ -52,7 +52,6 @@ function RGBAtoRGB(rgba) {
         g3 = Math.round(((1 - a) * g + (a * g))),
         b3 = Math.round(((1 - a) * b + (a * b)))
     return "rgb(" + r3 + "," + g3 + "," + b3 + ")"
-
 }
 
 function checkMaxLength(textareaID, maxLength) {
@@ -92,13 +91,17 @@ function getEditButtonNode(types) {
 
 function updateTemplateData(id, type, value) {
     var templateData = JSON.parse(localStorage.getItem(templateId) || '{}');
+
     var targetData = templateData[id] || {}
+
     targetData[type] = value
     templateData[id] = targetData
+
     localStorage.setItem(templateId, JSON.stringify(templateData));
 }
 function restoreTemplateData() {
     var templateData = JSON.parse(localStorage.getItem(templateId) || '{}');
+
     $.each(templateData, function (id, targetData) {
 
         var target = $('#' + id)
@@ -120,93 +123,105 @@ function restoreTemplateData() {
     });
 }
 
+function appendBackgroundColorChangeEvent(target) {
+    picker = new CP(target, false)
+    picker.enter()
+    var bgColor = root.css('backgroundColor')
+    picker.set(RGBAtoRGB(bgColor))
+    picker.on('change', function (color) {
+        root.css('background-color', color);
+        updateTemplateData(root.attr('id'), EditableTypes.BackgroundColor, color)
+    })
+}
+function appendFontColorChangeEvent(target) {
+    picker = new CP(target, false)
+    picker.enter()
+    var bgColor = root.css('color')
+    picker.set(RGBAtoRGB(bgColor))
+    picker.on('change', function (color) {
+        root.css('color', color);
+        updateTemplateData(root.attr('id'), EditableTypes.FontColor, color)
+    })
+}
+function appendImageChangeEvent() {
+    $.magnificPopup.open({
+        mainClass: 'img-gallery',
+        items: imgUrls,
+        gallery: {
+            enabled: true
+        },
+        type: 'image', // this is a default type,
+        closeBtnInside: true,
+        callbacks: {
+            beforeOpen: function () {
+            },
+            updateStatus: function (data) {
+                $(".btn-select-img").on('click', function (e) {
+                    magnificPopup.items // array that holds data for popup items
+                    magnificPopup.currItem // data for current item
+                    magnificPopup.index
+                    magnificPopup.st.mainEl
+                    // var target = magnificPopup.st.el[0] // Target clicked element that opened popup (works if popup is initialized from DOM element)
+                    root.css('background-image', 'url(' + magnificPopup.currItem.src + ')')
+                    updateTemplateData(root.attr('id'), EditableTypes.Image, magnificPopup.currItem.src)
+                    magnificPopup.close()
+                });
+            },
+            beforeClose: function () {
+            }
+        }
+    });
+}
+function appendTextChangeEvent() {
+    $.magnificPopup.open({
+        midClick: true,
+        items: {
+            src: customTextModal,
+            type: 'inline'
+        },
+        // closeBtnInside: true,
+        callbacks: {
+            beforeOpen: function () {
+            },
+            open: function () {
+                $("button.edit", root).remove()
+
+                var initialVal = root.text().trim().slice(0, maxLength)
+
+                var maxLength = root.data('character-limit')
+                if (maxLength) {
+                    maxLength && $('#textarea').attr('maxlength', maxLength);
+                    maxLength && $('#textarea').after("<div>max-length: " + maxLength + " / <span id='remainingLengthTempId'>" + (maxLength - initialVal.length) + "</span> remaining</div>");
+                    $('#textarea').bind("keyup change", function () { checkMaxLength(this.id, maxLength); })
+                }
+
+                $('#textarea').val(initialVal);
+
+                $("#btn-update-text").on('click', function () {
+                    var updatedVal = $("#textarea").val().trim()
+                    root.text(updatedVal);
+                    updateTemplateData(root.attr('id'), EditableTypes.Text, updatedVal)
+                    magnificPopup.close()
+                });
+            },
+            beforeClose: function () {
+            }
+        }
+    });
+}
 function appendEventToEditButton(buttonNode, type) {
     buttonNode.on('click', function (e) {
         if (!!picker) {
             picker.exit()
         }
         if (type === EditableTypes.BackgroundColor) {
-            picker = new CP(this, false)
-            picker.enter()
-            var bgColor = root.css('backgroundColor')
-            picker.set(RGBAtoRGB(bgColor))
-            picker.on('change', function (color) {
-                root.css('background-color', color);
-                updateTemplateData(root.attr('id'), type, color)
-            })
+            appendBackgroundColorChangeEvent(this)
         } else if (type === EditableTypes.FontColor) {
-            picker = new CP(this, false)
-            picker.enter()
-            var bgColor = root.css('color')
-            picker.set(RGBAtoRGB(bgColor))
-            picker.on('change', function (color) {
-                root.css('color', color);
-                updateTemplateData(root.attr('id'), type, color)
-            })
+            appendFontColorChangeEvent(this)
         } else if (type === EditableTypes.Image) {
-            $.magnificPopup.open({
-                mainClass: 'img-gallery',
-                items: imgUrls,
-                gallery: {
-                    enabled: true
-                },
-                type: 'image', // this is a default type,
-                closeBtnInside: true,
-                callbacks: {
-                    beforeOpen: function () {
-                    },
-                    updateStatus: function (data) {
-                        $(".btn-select-img").on('click', function (e) {
-                            magnificPopup.items // array that holds data for popup items
-                            magnificPopup.currItem // data for current item
-                            magnificPopup.index
-                            magnificPopup.st.mainEl
-                            // var target = magnificPopup.st.el[0] // Target clicked element that opened popup (works if popup is initialized from DOM element)
-                            root.css('background-image', 'url(' + magnificPopup.currItem.src + ')')
-                            updateTemplateData(root.attr('id'), type, magnificPopup.currItem.src)
-                            magnificPopup.close()
-                        });
-                    },
-                    beforeClose: function () {
-                    }
-                }
-            });
+            appendImageChangeEvent()
         } else if (type === EditableTypes.Text) {
-            $.magnificPopup.open({
-                midClick: true,
-                items: {
-                    src: customTextModal,
-                    type: 'inline'
-                },
-                // closeBtnInside: true,
-                callbacks: {
-                    beforeOpen: function () {
-                    },
-                    open: function () {
-                        $("button.edit", root).remove()
-
-                        var initialVal = root.text().trim().slice(0, maxLength)
-
-                        var maxLength = root.data('character-limit')
-                        if (maxLength) {
-                            maxLength && $('#textarea').attr('maxlength', maxLength);
-                            maxLength && $('#textarea').after("<div>max-length: " + maxLength + " / <span id='remainingLengthTempId'>" + (maxLength - initialVal.length) + "</span> remaining</div>");
-                            $('#textarea').bind("keyup change", function () { checkMaxLength(this.id, maxLength); })
-                        }
-
-                        $('#textarea').val(initialVal);
-
-                        $("#btn-update-text").on('click', function () {
-                            var updatedVal = $("#textarea").val().trim()
-                            root.text(updatedVal);
-                            updateTemplateData(root.attr('id'), type, updatedVal)
-                            magnificPopup.close()
-                        });
-                    },
-                    beforeClose: function () {
-                    }
-                }
-            }, 0);
+            appendTextChangeEvent()
         }
     })
 }
@@ -228,7 +243,6 @@ $(function () {
     var templateData = localStorage.getItem(templateId);
     templateData && restoreTemplateData()
 
-    console.log('--template id---', templateId, templateData)
     $('*[data-editable]').hover(
         function (e) {
             $('*[data-editable]').removeClass('focus-hover')
