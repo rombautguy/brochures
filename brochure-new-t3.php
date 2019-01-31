@@ -20,15 +20,9 @@
         font-size: 26px;
         font-weight: bold;
     }
-    .header-left {
-        flex: 1;
-        background-image: linear-gradient(to bottom right, white, #28A7AD);
-        border-bottom-right-radius: 10px;
-    }
+    .header-left,
     .header-right {
         flex: 1;
-        background-image: linear-gradient(to bottom right, white, #28A7AD);
-        border-bottom-left-radius: 10px;
     }
     .header-center {
         flex: 1.5;
@@ -39,12 +33,9 @@
     }
     .header-address {
         background-color: #222222;
-        border-bottom-right-radius: 5px;
-        border-bottom-left-radius: 5px;
     }
     .header-price {
         background-color: #222222;
-        border-radius: 5px;
         margin: 5px 0;
     }
 
@@ -85,7 +76,7 @@
 <tr>
 	<td>
 		<div class="header">
-            <div class="header-left"></div>
+            <div data-editable="image" class="header-left" style="background-image:url(<?= $photo_data['p6']['url_small'] ?>); background-size: cover"></div>
             <div class="header-center">
                 <div data-editable="background-color" class="header-address">
                     <?= $full_address ?>
@@ -94,7 +85,7 @@
                     <?= $display_price ?>
                 </div>
             </div>
-            <div class="header-right"></div>
+            <div data-editable="image" class="header-right" style="background-image:url(<?= $photo_data['p7']['url_small'] ?>); background-size: cover"></div>
 		</div>
         <table cellspacing="0" border="0">
 			<tr>
