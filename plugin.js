@@ -1,6 +1,7 @@
 var EditableTypes = {
     Text: 'text',
     BackgroundColor: 'background-color',
+    FontColor: 'font-color',
     Image: 'image'
 }
 
@@ -72,6 +73,11 @@ function getEditButtonNode(types) {
         appendEventToEditButton(buttonNode, EditableTypes.BackgroundColor)
         buttonNode.appendTo(buttonContainer)
     }
+    if (types.includes(EditableTypes.FontColor)) {
+        var buttonNode = $('<button class="edit btn-custom">Change Font Color</button>')
+        appendEventToEditButton(buttonNode, EditableTypes.FontColor)
+        buttonNode.appendTo(buttonContainer)
+    }
     if (types.includes(EditableTypes.Image)) {
         var buttonNode = $('<button class="edit btn-custom">Change Image</button>')
         appendEventToEditButton(buttonNode, EditableTypes.Image)
@@ -97,6 +103,14 @@ function appendEventToEditButton(buttonNode, type) {
             picker.set(RGBAtoRGB(bgColor))
             picker.on('change', function (color) {
                 root.css('background-color', color);
+            })
+        } else if (type === EditableTypes.FontColor) {
+            picker = new CP(this, false)
+            picker.enter()
+            var bgColor = root.css('color')
+            picker.set(RGBAtoRGB(bgColor))
+            picker.on('change', function (color) {
+                root.css('color', color);
             })
         } else if (type === EditableTypes.Image) {
             $.magnificPopup.open({

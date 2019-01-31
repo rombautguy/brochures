@@ -74,7 +74,7 @@
 <tr>
 	<table>
 		<td style="width: 510px;">
-			<div style="height: 260px; padding: 10px;" data-editable="text background-color" data-character-limit=1200>
+			<div style="height: 260px; padding: 10px;" data-editable="text background-color font-color" data-character-limit=1200>
 				<?php
 				$unbranded_desc = '';
 				if (strlen($myrow['agent_desc']) > 1200)
