@@ -53,6 +53,13 @@ function RGBAtoRGB(rgba) {
         b3 = Math.round(((1 - a) * b + (a * b)))
     return "rgb(" + r3 + "," + g3 + "," + b3 + ")"
 }
+function rgb2hex(orig) {
+    var rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+)/i);
+    return (rgb && rgb.length === 4) ? "#" +
+        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : orig;
+}
 
 function checkMaxLength(textareaID, maxLength) {
     currentLengthInTextarea = $("#" + textareaID).val().length;
@@ -124,24 +131,58 @@ function restoreTemplateData() {
 }
 
 function appendBackgroundColorChangeEvent(target) {
-    picker = new CP(target, false)
-    picker.enter()
-    var bgColor = root.css('backgroundColor')
-    picker.set(RGBAtoRGB(bgColor))
-    picker.on('change', function (color) {
-        root.css('background-color', color);
-        updateTemplateData(root.attr('id'), EditableTypes.BackgroundColor, color)
-    })
+    $(target).ColorPicker({
+        onShow: function (colpkr) {
+            $(colpkr).fadeIn(100);
+            return false;
+        },
+        onHide: function (colpkr) {
+            $(colpkr).fadeOut(100);
+            return false;
+        },
+        onSubmit: function (hsb, hex, rgb, el) {
+            $(el).val(hex);
+            $(el).ColorPickerHide();
+        },
+        onBeforeShow: function () {
+            var bgColor = root.css('backgroundColor')
+            $(this).ColorPickerSetColor(rgb2hex(bgColor));
+        },
+        onChange: function (hsb, hex, rgb) {
+            $('#target').css('backgroundColor', '#' + hex);
+            root.css('background-color', '#' + hex);
+            updateTemplateData(root.attr('id'), EditableTypes.BackgroundColor, '#' + hex)
+        }
+    }).bind('keyup', function () {
+        $(this).ColorPickerSetColor(this.value);
+    });
 }
 function appendFontColorChangeEvent(target) {
-    picker = new CP(target, false)
-    picker.enter()
-    var bgColor = root.css('color')
-    picker.set(RGBAtoRGB(bgColor))
-    picker.on('change', function (color) {
-        root.css('color', color);
-        updateTemplateData(root.attr('id'), EditableTypes.FontColor, color)
-    })
+    $(target).ColorPicker({
+        onShow: function (colpkr) {
+            $(colpkr).fadeIn(100);
+            return false;
+        },
+        onHide: function (colpkr) {
+            $(colpkr).fadeOut(100);
+            return false;
+        },
+        onSubmit: function (hsb, hex, rgb, el) {
+            $(el).val(hex);
+            $(el).ColorPickerHide();
+        },
+        onBeforeShow: function () {
+            var bgColor = root.css('color')
+            $(this).ColorPickerSetColor(rgb2hex(bgColor));
+        },
+        onChange: function (hsb, hex, rgb) {
+            $('#target').css('backgroundColor', '#' + hex);
+            root.css('color', '#' + hex);
+            updateTemplateData(root.attr('id'), EditableTypes.FontColor, '#' + hex)
+        }
+    }).bind('keyup', function () {
+        $(this).ColorPickerSetColor(this.value);
+    });
 }
 function appendImageChangeEvent() {
     $.magnificPopup.open({
@@ -210,20 +251,19 @@ function appendTextChangeEvent() {
     });
 }
 function appendEventToEditButton(buttonNode, type) {
-    buttonNode.on('click', function (e) {
-        if (!!picker) {
-            picker.exit()
-        }
-        if (type === EditableTypes.BackgroundColor) {
-            appendBackgroundColorChangeEvent(this)
-        } else if (type === EditableTypes.FontColor) {
-            appendFontColorChangeEvent(this)
-        } else if (type === EditableTypes.Image) {
+    if (type === EditableTypes.BackgroundColor) {
+        appendBackgroundColorChangeEvent(buttonNode)
+    } else if (type === EditableTypes.FontColor) {
+        appendFontColorChangeEvent(buttonNode)
+    } else if (type === EditableTypes.Image) {
+        buttonNode.on('click', function (e) {
             appendImageChangeEvent()
-        } else if (type === EditableTypes.Text) {
+        })
+    } else if (type === EditableTypes.Text) {
+        buttonNode.on('click', function (e) {
             appendTextChangeEvent()
-        }
-    })
+        })
+    }
 }
 
 
@@ -232,12 +272,6 @@ var magnificPopup = $.magnificPopup.instance;
 var picker = null
 var root = null
 
-$(document).click(function (e) {
-    $target = $(e.target);
-    if (!$target.closest('.color-picker').length && !$target.closest("button.edit").length && !!picker) {
-        picker.exit()
-    }
-})
 
 $(function () {
     var templateData = localStorage.getItem(templateId);
