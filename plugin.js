@@ -7,9 +7,9 @@ var EditableTypes = {
 
 var customTextModal =
     '<div class="update-text-popup">' +
-        '<label for="textarea">Update Text</label>' +
-        '<textarea id="textarea" rows="5"></textarea>' +
-        '<button id="btn-update-text" class="btn-custom">Update Text</button>' +
+    '<label for="textarea">Update Text</label>' +
+    '<textarea id="textarea" rows="5"></textarea>' +
+    '<button id="btn-update-text" class="btn-custom">Update Text</button>' +
     '</div>';
 var imgUrls = [
     {
@@ -55,18 +55,17 @@ function RGBAtoRGB(rgba) {
 
 }
 
-function checkMaxLength(textareaID, maxLength){
-    currentLengthInTextarea = $("#"+textareaID).val().length;
+function checkMaxLength(textareaID, maxLength) {
+    currentLengthInTextarea = $("#" + textareaID).val().length;
     $(remainingLengthTempId).text(parseInt(maxLength) - parseInt(currentLengthInTextarea));
-    
-    if (currentLengthInTextarea > (maxLength)) { 
+
+    if (currentLengthInTextarea > (maxLength)) {
         $("textarea").val($("textarea").val().slice(0, maxLength));
         $(remainingLengthTempId).text(0);
     }
 }
 
 function getEditButtonNode(types) {
-    console.log(types, '---types---')
     var buttonContainer = $('<div class="edit-button-container"></div>');
     if (types.includes(EditableTypes.BackgroundColor)) {
         var buttonNode = $('<button class="edit btn-custom">Change Background Color</button>')
@@ -91,6 +90,36 @@ function getEditButtonNode(types) {
     return buttonContainer;
 }
 
+function updateTemplateData(id, type, value) {
+    var templateData = JSON.parse(localStorage.getItem(templateId) || '{}');
+    var targetData = templateData[id] || {}
+    targetData[type] = value
+    templateData[id] = targetData
+    localStorage.setItem(templateId, JSON.stringify(templateData));
+}
+function restoreTemplateData() {
+    var templateData = JSON.parse(localStorage.getItem(templateId) || '{}');
+    $.each(templateData, function (id, targetData) {
+
+        var target = $('#' + id)
+
+        $.each(targetData, function (type, value) {
+            if (type === EditableTypes.BackgroundColor) {
+                target.css('background-color', value);
+            }
+            if (type === EditableTypes.FontColor) {
+                target.css('color', value);
+            }
+            if (type === EditableTypes.Image) {
+                target.css('background-image', 'url(' + value + ')')
+            }
+            if (type === EditableTypes.Text) {
+                target.text(value);
+            }
+        })
+    });
+}
+
 function appendEventToEditButton(buttonNode, type) {
     buttonNode.on('click', function (e) {
         if (!!picker) {
@@ -103,6 +132,7 @@ function appendEventToEditButton(buttonNode, type) {
             picker.set(RGBAtoRGB(bgColor))
             picker.on('change', function (color) {
                 root.css('background-color', color);
+                updateTemplateData(root.attr('id'), type, color)
             })
         } else if (type === EditableTypes.FontColor) {
             picker = new CP(this, false)
@@ -111,6 +141,7 @@ function appendEventToEditButton(buttonNode, type) {
             picker.set(RGBAtoRGB(bgColor))
             picker.on('change', function (color) {
                 root.css('color', color);
+                updateTemplateData(root.attr('id'), type, color)
             })
         } else if (type === EditableTypes.Image) {
             $.magnificPopup.open({
@@ -126,13 +157,13 @@ function appendEventToEditButton(buttonNode, type) {
                     },
                     updateStatus: function (data) {
                         $(".btn-select-img").on('click', function (e) {
-                            console.log('image onclick')
                             magnificPopup.items // array that holds data for popup items
                             magnificPopup.currItem // data for current item
                             magnificPopup.index
                             magnificPopup.st.mainEl
                             // var target = magnificPopup.st.el[0] // Target clicked element that opened popup (works if popup is initialized from DOM element)
                             root.css('background-image', 'url(' + magnificPopup.currItem.src + ')')
+                            updateTemplateData(root.attr('id'), type, magnificPopup.currItem.src)
                             magnificPopup.close()
                         });
                     },
@@ -160,7 +191,7 @@ function appendEventToEditButton(buttonNode, type) {
                         if (maxLength) {
                             maxLength && $('#textarea').attr('maxlength', maxLength);
                             maxLength && $('#textarea').after("<div>max-length: " + maxLength + " / <span id='remainingLengthTempId'>" + (maxLength - initialVal.length) + "</span> remaining</div>");
-                            $('#textarea').bind("keyup change", function(){checkMaxLength(this.id, maxLength); } )
+                            $('#textarea').bind("keyup change", function () { checkMaxLength(this.id, maxLength); })
                         }
 
                         $('#textarea').val(initialVal);
@@ -168,6 +199,7 @@ function appendEventToEditButton(buttonNode, type) {
                         $("#btn-update-text").on('click', function () {
                             var updatedVal = $("#textarea").val().trim()
                             root.text(updatedVal);
+                            updateTemplateData(root.attr('id'), type, updatedVal)
                             magnificPopup.close()
                         });
                     },
@@ -180,19 +212,23 @@ function appendEventToEditButton(buttonNode, type) {
 }
 
 
-
+var templateId = $('*[data-template-id]').data('template-id')
 var magnificPopup = $.magnificPopup.instance;
 var picker = null
 var root = null
 
-$(document).click(function(e) {
+$(document).click(function (e) {
     $target = $(e.target);
-    if (!$target.closest('.color-picker').length && !$target.closest("button.edit").length && !!picker){
+    if (!$target.closest('.color-picker').length && !$target.closest("button.edit").length && !!picker) {
         picker.exit()
     }
 })
 
 $(function () {
+    var templateData = localStorage.getItem(templateId);
+    templateData && restoreTemplateData()
+
+    console.log('--template id---', templateId, templateData)
     $('*[data-editable]').hover(
         function (e) {
             $('*[data-editable]').removeClass('focus-hover')
