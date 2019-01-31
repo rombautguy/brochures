@@ -6,26 +6,26 @@ var EditableTypes = {
 
 var customTextModal =
     '<div class="update-text-popup">' +
-    '<label for="textarea">Update Text</label>' +
-    '<textarea id="textarea" rows="5"></textarea>' +
-    '<button id="update-text">Update Text</button>' +
+        '<label for="textarea">Update Text</label>' +
+        '<textarea id="textarea" rows="5"></textarea>' +
+        '<button id="btn-update-text" class="btn-custom">Update Text</button>' +
     '</div>';
 var imgUrls = [
     {
         src: "https://5fef0e83e88e7201d5ac-03d894bd6aa9e18271441adec0a042f6.ssl.cf5.rackcdn.com/1041/20/LPHD0/10410320/10410320-V2W7419cY5VNyRfN.jpg",
-        title: "Berkshire Model Exterior<button class='btn-select-img'>Select This Image</button>"
+        title: "Berkshire Model Exterior<button class='btn-select-img btn-custom'>Select This Image</button>"
     },
     {
         src: "https://5fef0e83e88e7201d5ac-03d894bd6aa9e18271441adec0a042f6.ssl.cf5.rackcdn.com/1041/77/LPHD0/10410677/10410677-jxR7bJ7RhmY7QJyR.jpg",
-        title: "Picture of Exterior of Hudson Model<button class='btn-select-img'>Select This Image</button>"
+        title: "Picture of Exterior of Hudson Model<button class='btn-select-img btn-custom'>Select This Image</button>"
     },
     {
         src: "https://5fef0e83e88e7201d5ac-03d894bd6aa9e18271441adec0a042f6.ssl.cf5.rackcdn.com/1041/20/LPHD0/10410320/10410320-SmY4SDPP44rTtZMJ.jpg",
-        title: "Chatham Model Exterior<button class='btn-select-img'>Select This Image</button>"
+        title: "Chatham Model Exterior<button class='btn-select-img btn-custom'>Select This Image</button>"
     },
     {
         src: "https://5fef0e83e88e7201d5ac-03d894bd6aa9e18271441adec0a042f6.ssl.cf5.rackcdn.com/1027/81/LPHD0/10276581/10276581-hqGKgPJrFg5sNN4h.jpg",
-        title: "Master Bath<button class='btn-select-img'>Select This Image</button>"
+        title: "Master Bath<button class='btn-select-img btn-custom'>Select This Image</button>"
     }
 ];
 
@@ -54,21 +54,31 @@ function RGBAtoRGB(rgba) {
 
 }
 
+function checkMaxLength(textareaID, maxLength){
+    currentLengthInTextarea = $("#"+textareaID).val().length;
+    $(remainingLengthTempId).text(parseInt(maxLength) - parseInt(currentLengthInTextarea));
+    
+    if (currentLengthInTextarea > (maxLength)) { 
+        $("textarea").val($("textarea").val().slice(0, maxLength));
+        $(remainingLengthTempId).text(0);
+    }
+}
+
 function getEditButtonNode(types) {
     console.log(types, '---types---')
     var buttonContainer = $('<div class="edit-button-container"></div>');
     if (types.includes(EditableTypes.BackgroundColor)) {
-        var buttonNode = $('<button class="edit">Change Background Color</button>')
+        var buttonNode = $('<button class="edit btn-custom">Change Background Color</button>')
         appendEventToEditButton(buttonNode, EditableTypes.BackgroundColor)
         buttonNode.appendTo(buttonContainer)
     }
     if (types.includes(EditableTypes.Image)) {
-        var buttonNode = $('<button class="edit">Change Image</button>')
+        var buttonNode = $('<button class="edit btn-custom">Change Image</button>')
         appendEventToEditButton(buttonNode, EditableTypes.Image)
         buttonNode.appendTo(buttonContainer)
     }
     if (types.includes(EditableTypes.Text)) {
-        var buttonNode = $('<button class="edit">Change Text</button>')
+        var buttonNode = $('<button class="edit btn-custom">Change Text</button>')
         appendEventToEditButton(buttonNode, EditableTypes.Text)
         buttonNode.appendTo(buttonContainer)
     }
@@ -129,10 +139,19 @@ function appendEventToEditButton(buttonNode, type) {
                     },
                     open: function () {
                         $("button.edit", root).remove()
-                        var initialVal = root.text().trim()
+
+                        var initialVal = root.text().trim().slice(0, maxLength)
+
+                        var maxLength = root.data('character-limit')
+                        if (maxLength) {
+                            maxLength && $('#textarea').attr('maxlength', maxLength);
+                            maxLength && $('#textarea').after("<div>max-length: " + maxLength + " / <span id='remainingLengthTempId'>" + (maxLength - initialVal.length) + "</span> remaining</div>");
+                            $('#textarea').bind("keyup change", function(){checkMaxLength(this.id, maxLength); } )
+                        }
+
                         $('#textarea').val(initialVal);
 
-                        $("#update-text").on('click', function () {
+                        $("#btn-update-text").on('click', function () {
                             var updatedVal = $("#textarea").val().trim()
                             root.text(updatedVal);
                             magnificPopup.close()
@@ -145,6 +164,8 @@ function appendEventToEditButton(buttonNode, type) {
         }
     })
 }
+
+
 
 var magnificPopup = $.magnificPopup.instance;
 var picker = null

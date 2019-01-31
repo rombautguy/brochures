@@ -48,24 +48,24 @@
 					</div>
 				</td>
 				<td style="width: 170px;">
-                    <table cellpadding="2" cellspacing="0" >
-                        <tr>
-                            <td style="width: 170px;">
-                                <?php if (IsValid::Url($photo_data['p2']['url_small'])) : ?>
-                                <div data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p2']['url_small'] ?>); background-size: cover">
-                                </div>
-                                <?php endif ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width: 170px;">
-                                <?php if (IsValid::Url($photo_data['p3']['url_small'])) : ?>
-                                <div data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p3']['url_small'] ?>); background-size: cover">
-                                </div>
-                                <?php endif ?>
-                            </td>
-                        </tr>
-                    </table>
+					<table cellpadding="2" cellspacing="0" >
+							<tr>
+									<td style="width: 170px;">
+											<?php if (IsValid::Url($photo_data['p2']['url_small'])) : ?>
+											<div data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p2']['url_small'] ?>); background-size: cover">
+											</div>
+											<?php endif ?>
+									</td>
+							</tr>
+							<tr>
+									<td style="width: 170px;">
+											<?php if (IsValid::Url($photo_data['p3']['url_small'])) : ?>
+											<div data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p3']['url_small'] ?>); background-size: cover">
+											</div>
+											<?php endif ?>
+									</td>
+							</tr>
+					</table>
 				</td>
 			</tr>
 		</table>
@@ -74,7 +74,7 @@
 <tr>
 	<table>
 		<td style="width: 510px;">
-			<div style="height: 260px; padding: 10px;" data-editable="text background-color">
+			<div style="height: 260px; padding: 10px;" data-editable="text background-color" data-character-limit=1200>
 				<?php
 				$unbranded_desc = '';
 				if (strlen($myrow['agent_desc']) > 1200)

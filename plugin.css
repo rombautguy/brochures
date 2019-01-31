@@ -13,16 +13,13 @@
 
 .update-text-popup #textarea {
     width: 300px;
-    height: 200px;;
-    margin: 20px 0;
+    height: 200px;
+    margin: 20px 0 0 0;
 }
 
 [data-editable] {
     position: relative;
     transition: box-shadow .3s;
-}
-[data-editable]:hover {
-    /* cursor: pointer; */
 }
 
 .edit-button-container {
@@ -34,8 +31,7 @@
     justify-content: center;
     transform: translate(-50%, -50%);
 }
-.edit-button-container button.edit,
-.btn-select-img {
+.btn-custom {
     cursor: pointer;
     color: #fff;
     background-color: #007bff;
@@ -53,4 +49,8 @@
 .img-gallery .btn-select-img {
     position: absolute;
     left: 50%;
+    transform: translateX(-50%);
+}
+#btn-update-text {
+    margin-top: 20px;
 }
