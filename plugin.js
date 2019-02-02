@@ -134,10 +134,12 @@ function appendBackgroundColorChangeEvent(target) {
     $(target).ColorPicker({
         onShow: function (colpkr) {
             $(colpkr).fadeIn(100);
+            isOpenColorPicker = true
             return false;
         },
         onHide: function (colpkr) {
             $(colpkr).fadeOut(100);
+            isOpenColorPicker = false
             return false;
         },
         onSubmit: function (hsb, hex, rgb, el) {
@@ -161,10 +163,12 @@ function appendFontColorChangeEvent(target) {
     $(target).ColorPicker({
         onShow: function (colpkr) {
             $(colpkr).fadeIn(100);
+            isOpenColorPicker = true
             return false;
         },
         onHide: function (colpkr) {
             $(colpkr).fadeOut(100);
+            isOpenColorPicker = false
             return false;
         },
         onSubmit: function (hsb, hex, rgb, el) {
@@ -271,6 +275,7 @@ var templateId = $('*[data-template-id]').data('template-id')
 var magnificPopup = $.magnificPopup.instance;
 var picker = null
 var root = null
+var isOpenColorPicker = false
 
 
 $(function () {
@@ -279,6 +284,9 @@ $(function () {
 
     $('*[data-editable]').hover(
         function (e) {
+            if (isOpenColorPicker) {
+                return false
+            }
             $('*[data-editable]').removeClass('focus-hover')
             $(".edit-button-container", $('*[data-editable]')).remove()
 
