@@ -31,7 +31,7 @@
 <table cellpadding="0" cellspacing="0" style="max-width: 680px; border: 0px solid #383838;">
 	<tr>
 		<td>
-			<div id="header-color" class="header" data-editable="background-color">
+			<div id="header-color" class="header" data-editable="background-color font-color">
 				<div class="header-address">
 					<span><?= $full_address ?></span>
 				</div>
@@ -92,11 +92,11 @@
 					<?= $unbranded_desc ?>
 				</div>
 			</td>
-			<td id="agent_detail" data-editable="background-color" style="width: 170px; background-color: #EEE;">
+			<td id="agent_detail" data-editable="background-color font-color" style="width: 170px; background-color: #EEE;">
 				<div style="text-align: center;">
 					<?php if (IsValid::Url($profile_photo)) : ?>
 					<div style="padding: 10px;">
-					<div id="agent_photo" data-editable="image" style="margin-bottom: 20px;width: 150px; height: 150px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
+					<div id="agent_photo" style="margin-bottom: 20px;width: 150px; height: 150px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
 					</div>
 					<?php endif ?>
 					<?php if (!empty($logo_url)) : ?>
