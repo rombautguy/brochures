@@ -71,7 +71,7 @@
         color: white;
         line-height: 1.4;
     }
-    .vital-features {
+    #vital_features {
         font-size: 20px;
         font-weight: bold;
         padding-bottom: 10px;
@@ -131,7 +131,7 @@
                     $unbranded_desc = $myrow['agent_desc'];
                 }
                 ?>
-                <div id="vital_features" data-editable="text font-color" data-character-limit=30 class="vital-features"><?= $vital_features ?></div><br />
+                <div id="vital_features" data-editable="text font-color" data-character-limit=30><?= $vital_features ?></div><br />
                 <div id="unbranded_desc" data-editable="text font-color" data-character-limit=500><?= $unbranded_desc ?></div>
             </div>
         </div>

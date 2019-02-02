@@ -13,7 +13,7 @@
 	$vital_features = $myrow['beds'].' Bedrooms<br />'.$myrow['above_area'].' Sq. Ft.<br />'.$myrow['full_baths'].' Bathrooms<br />';
 ?>
 <style>
-	.header {
+	#header {
 		display: flex;
 		justify-content: space-between;
 		background-color: #28A7AD;
@@ -26,12 +26,38 @@
 	.header-price {
 		font-size: 40px;
 	}
+	#primary_photo {
+		width: 510px;
+		height: 300px;
+		background-size: cover
+	}
+	#small_photo1,
+	#small_photo2 {
+		width: 170px;
+		height: 150px;
+		background-size: cover
+	}
+	#agent_desc {
+		height: 260px;
+		padding: 10px;
+	}
+	#agent_detail {
+		width: 170px;
+		background-color: #eee;
+	}
+	#agent_photo {
+		margin-bottom: 20px;
+		width: 150px;
+		height: 150px;
+		border-radius: 100%;
+		background-size: cover;
+	}
 </style>
 <div data-template-id="new-t1">
 <table cellpadding="0" cellspacing="0" style="max-width: 680px; border: 0px solid #383838;">
 	<tr>
 		<td>
-			<div id="header-color" class="header" data-editable="background-color font-color">
+			<div id="header" data-editable="background-color font-color">
 				<div class="header-address">
 					<span><?= $full_address ?></span>
 				</div>
@@ -45,7 +71,7 @@
 			<table cellpadding="2" cellspacing="0" >
 				<tr>
 					<td style="width: 510px;">
-						<div id="primary_photo" data-editable="image" style="width: 510px; height: 300px; background-image:url(<?= $primary_photo_url ?>); background-size: cover">
+						<div id="primary_photo" data-editable="image" style="background-image:url(<?= $primary_photo_url ?>);">
 						</div>
 					</td>
 					<td style="width: 170px;">
@@ -53,7 +79,7 @@
 								<tr>
 										<td style="width: 170px;">
 												<?php if (IsValid::Url($photo_data['p2']['url_small'])) : ?>
-												<div id="small_photo1" data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p2']['url_small'] ?>); background-size: cover">
+												<div id="small_photo1" data-editable="image" style="background-image:url(<?= $photo_data['p2']['url_small'] ?>);">
 												</div>
 												<?php endif ?>
 										</td>
@@ -61,7 +87,7 @@
 								<tr>
 										<td style="width: 170px;">
 												<?php if (IsValid::Url($photo_data['p3']['url_small'])) : ?>
-												<div id="small_photo2" data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p3']['url_small'] ?>); background-size: cover">
+												<div id="small_photo2" data-editable="image" style="background-image:url(<?= $photo_data['p3']['url_small'] ?>);">
 												</div>
 												<?php endif ?>
 										</td>
@@ -75,7 +101,7 @@
 	<tr>
 		<table>
 			<td style="width: 510px;">
-				<div id="agent_desc" style="height: 260px; padding: 10px;" data-editable="text background-color font-color" data-character-limit=1200>
+				<div id="agent_desc" data-editable="text background-color font-color" data-character-limit=1200>
 					<?php
 					$unbranded_desc = '';
 					if (strlen($myrow['agent_desc']) > 1200)
@@ -92,11 +118,11 @@
 					<?= $unbranded_desc ?>
 				</div>
 			</td>
-			<td id="agent_detail" data-editable="background-color font-color" style="width: 170px; background-color: #EEE;">
+			<td id="agent_detail" data-editable="background-color font-color">
 				<div style="text-align: center;">
 					<?php if (IsValid::Url($profile_photo)) : ?>
 					<div style="padding: 10px;">
-					<div id="agent_photo" style="margin-bottom: 20px;width: 150px; height: 150px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
+					<div id="agent_photo" style="background-image:url(<?= $profile_photo ?>);">
 					</div>
 					<?php endif ?>
 					<?php if (!empty($logo_url)) : ?>

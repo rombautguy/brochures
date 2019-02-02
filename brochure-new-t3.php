@@ -20,9 +20,10 @@
         font-size: 26px;
         font-weight: bold;
     }
-    .header-left,
-    .header-right {
+    #header_left,
+    #header_right {
         flex: 1;
+        background-size: cover;
     }
     .header-center {
         flex: 1.5;
@@ -31,19 +32,32 @@
         text-align: center;
         margin: 0 5px;
     }
-    .header-address {
+    #header_address {
         background-color: #222222;
     }
-    .header-price {
+    #header_price {
         background-color: #222222;
         margin: 5px 0;
     }
+    #center_lt,
+    #center_lb,
+    #center_rt,
+    #center_rb {
+        width: 170px;
+        height: 150px;
+        background-size: cover;
+    }
+    #center {
+        width: 340px;
+        height: 300px;
+        background-size: cover;
+    }
 
-    .content {
+    #content {
         display: flex;
         color: black;
     }
-    .content-marketing {
+    #content_marketing {
         flex: 1;
         margin: 10px;
         line-height: 1.3;
@@ -53,7 +67,7 @@
         margin: 10px;
     }
 
-    .footer {
+    #footer {
         display: flex;
         background-color: #222222;
         color: white;
@@ -72,20 +86,21 @@
     }
     
 </style>
+<div data-template-id="new-t3">
 <table cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; border: 0px solid #383838;">
 <tr>
 	<td>
 		<div class="header">
-            <div data-editable="image" class="header-left" style="background-image:url(<?= $photo_data['p6']['url_small'] ?>); background-size: cover"></div>
+            <div id="header_left" data-editable="image" style="background-image:url(<?= $photo_data['p6']['url_small'] ?>);"></div>
             <div class="header-center">
-                <div data-editable="background-color" class="header-address">
+                <div id="header_address" data-editable="background-color font-color">
                     <?= $full_address ?>
                 </div>
-                <div data-editable="background-color" class="header-price">
+                <div id="header_price" data-editable="background-color font-color">
                     <?= $display_price ?>
                 </div>
             </div>
-            <div data-editable="image" class="header-right" style="background-image:url(<?= $photo_data['p7']['url_small'] ?>); background-size: cover"></div>
+            <div id="header_right" data-editable="image" style="background-image:url(<?= $photo_data['p7']['url_small'] ?>);"></div>
 		</div>
         <table cellspacing="0" border="0">
 			<tr>
@@ -94,7 +109,7 @@
                         <tr>
                             <td style="width: 170px;">
                                 <?php if (IsValid::Url($photo_data['p4']['url_small'])) : ?>
-                                <div data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p4']['url_small'] ?>); background-size: cover">
+                                <div id="center_lt" data-editable="image" style="background-image:url(<?= $photo_data['p4']['url_small'] ?>);">
                                 </div>
                                 <?php endif ?>
                             </td>
@@ -102,7 +117,7 @@
                         <tr>
                             <td style="width: 170px;">
                                 <?php if (IsValid::Url($photo_data['p3']['url_small'])) : ?>
-                                <div data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p3']['url_small'] ?>); background-size: cover">
+                                <div id="center_lb" data-editable="image" style="background-image:url(<?= $photo_data['p3']['url_small'] ?>);">
                                 </div>
                                 <?php endif ?>
                             </td>
@@ -110,7 +125,7 @@
                     </table>
 				</td>
 				<td style="width: 340px;">
-                    <div data-editable="image" style="width: 340px; height: 300px; background-image:url(<?= $primary_photo_url ?>); background-size: cover">
+                    <div id="center" data-editable="image" style="background-image:url(<?= $primary_photo_url ?>);">
                     </div>
 				</td>
 				<td style="width: 170px;">
@@ -118,7 +133,7 @@
                         <tr>
                             <td style="width: 170px;">
                                 <?php if (IsValid::Url($photo_data['p3']['url_small'])) : ?>
-                                <div data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p3']['url_small'] ?>); background-size: cover">
+                                <div id="center_rt" data-editable="image" style="background-image:url(<?= $photo_data['p3']['url_small'] ?>);">
                                 </div>
                                 <?php endif ?>
                             </td>
@@ -126,7 +141,7 @@
                         <tr>
                             <td style="width: 170px;">
                                 <?php if (IsValid::Url($photo_data['p2']['url_small'])) : ?>
-                                <div data-editable="image" style="width: 170px; height: 150px; background-image:url(<?= $photo_data['p2']['url_small'] ?>); background-size: cover">
+                                <div id="center_rb" data-editable="image" style="background-image:url(<?= $photo_data['p2']['url_small'] ?>);">
                                 </div>
                                 <?php endif ?>
                             </td>
@@ -135,8 +150,8 @@
 				</td>
 			</tr>
 		</table>
-		<div data-editable="background-color" class="content">
-            <div data-editable="text" class="content-marketing">
+		<div id="content" data-editable="background-color font-color">
+            <div id="content_marketing" data-editable="text" data-character-limit=500>
                 <?php
                 $unbranded_desc = '';
                 if (strlen($myrow['agent_desc']) > 500)
@@ -155,7 +170,7 @@
             <div class="content-features">
                 <?php if (!empty($all_features)) : ?>
                     <?php $num_elements = count($all_features); ?>
-                    <table id="BasicDetails" cellpadding="4" cellspacing="0" border="0" style="margin: 0 auto;">
+                    <table cellpadding="4" cellspacing="0" border="0" style="margin: 0 auto;">
                         <tr>
                         <?php for ($i = 1; $i <= $num_elements; $i++) : ?>
                             <td style="width: 160px;">&#9679; <?= $all_features[$i-1] ?></td>
@@ -172,9 +187,9 @@
 </tr>
 
 <tr>
-	<td data-editable="background-color" class="footer">
+	<td id="footer" data-editable="background-color">
         <?php if (IsValid::Url($profile_photo)) : ?>
-        <div data-editable="image" style="width: 100px; height: 100px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
+        <div style="width: 100px; height: 100px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
         </div>
         <?php endif ?>
         <div class="agent-info">
@@ -192,10 +207,17 @@
 	</td>
 </tr>
 </table>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
+
+<link rel="stylesheet" href="css/colorpicker/colorpicker.css" type="text/css" />
+<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker/layout.css" />
+<script type="text/javascript" src="js/colorpicker/colorpicker.js"></script>
+<script type="text/javascript" src="js/colorpicker/eye.js"></script>
+<script type="text/javascript" src="js/colorpicker/utils.js"></script>
 
 <link rel="stylesheet" href="./plugin.css">
 <script src="./plugin.js"></script>
