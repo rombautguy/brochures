@@ -99,7 +99,14 @@
         transform: translateY(-50%);
         text-align: center;
     }
+    #agent_detail {
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 </style>
+<div data-template-id="new-t2">
 <table cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; border: 0px solid #383838;">
 <tr>
 	<td>
@@ -124,29 +131,31 @@
                     $unbranded_desc = $myrow['agent_desc'];
                 }
                 ?>
-                <div data-editable="text" class="vital-features"><?= $vital_features ?></div><br />
-                <div data-editable="text"><?= $unbranded_desc ?></div>
+                <div id="vital_features" data-editable="text font-color" data-character-limit=30 class="vital-features"><?= $vital_features ?></div><br />
+                <div id="unbranded_desc" data-editable="text font-color" data-character-limit=500><?= $unbranded_desc ?></div>
             </div>
         </div>
 		<div class="agent" style="background: url(<?= $photo_data['p4']['url_small'] ?>); background-size: cover;">
             <div class="agent-rect"></div>
             <div class="agent-container">
-            <?php if (IsValid::Url($profile_photo)) : ?>
-				<div style="padding: 10px;">
-				<div data-editable="image" style="width: 150px; height: 150px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
-				</div>
-				<?php endif ?>
-				<?php if (!empty($logo_url)) : ?>
-				<div data-editable="image" style="max-width: 150px; max-height: 150px; background-image:url(<?= $logo_url ?>); background-size: cover">
-				</div>
-				<?php endif // logo url ?>
+                <div id="agent_detail" data-editable="background-color font-color" >
+                    <?php if (IsValid::Url($profile_photo)) : ?>
+                        <!-- <div style="padding: 10px;"> -->
+                        <div style="width: 150px; height: 150px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
+                        </div>
+                    <?php endif ?>
+                    <?php if (!empty($logo_url)) : ?>
+                        <div id="agent_logo" data-editable="image" style="max-width: 150px; max-height: 150px; background-image:url(<?= $logo_url ?>); background-size: cover">
+                        </div>
+                    <?php endif // logo url ?>
 
-                <?php $agent_name = "Guy Rombaut"; ?>
-                <div><strong style="font-size: 12pt;"><?= $agent_name; ?></strong></div>
-                <div><span style="font-size: 13pt;"><?= $primary_agent['company']; ?></span></div>
+                    <?php $agent_name = "Guy Rombaut"; ?>
+                    <div><strong style="font-size: 12pt;"><?= $agent_name; ?></strong></div>
+                    <div><span style="font-size: 13pt;"><?= $primary_agent['company']; ?></span></div>
 
-                <?php if (!empty($primary_agent['bphone'])) { echo '<div>' . $primary_agent['bphone'] . '</div>'; } ?>
-                <?php if (!empty($primary_agent['bcell'])) { echo '<div>' . $primary_agent['bcell'] . '</div>'; } ?>
+                    <?php if (!empty($primary_agent['bphone'])) { echo '<div>' . $primary_agent['bphone'] . '</div>'; } ?>
+                    <?php if (!empty($primary_agent['bcell'])) { echo '<div>' . $primary_agent['bcell'] . '</div>'; } ?>
+                </div>
             </div>
         </div>
 	</td>
@@ -158,10 +167,17 @@
 	</td>
 </tr>
 </table>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
+
+<link rel="stylesheet" href="css/colorpicker/colorpicker.css" type="text/css" />
+<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker/layout.css" />
+<script type="text/javascript" src="js/colorpicker/colorpicker.js"></script>
+<script type="text/javascript" src="js/colorpicker/eye.js"></script>
+<script type="text/javascript" src="js/colorpicker/utils.js"></script>
 
 <link rel="stylesheet" href="./plugin.css">
 <script src="./plugin.js"></script>
