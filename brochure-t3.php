@@ -21,20 +21,60 @@
 		$bar_font_size = '18px';
 	}
 ?>
+<style>
+	#primary_photo {
+		width: 510px;
+		height: 300px;
+		background-size: cover;
+	}
+	#agent_detail {
+		width: 170px;
+		background-color: #EEE;
+	}
+	#agent_photo {
+		margin-bottom: 20px;
+		width: 150px;
+		height: 150px;
+		border-radius: 100%;
+		background-size: cover;
+	}
+	#header {
+		background-color: #28A7AD;
+		color: #FFF;
+		font-weight: bold;
+		padding: 10px;
+	}
+	#photo_left,
+	#photo_right,
+	#photo_center {
+		width: 225px;
+		height: 150px;
+		background-size: cover;
+	}
+	#agent_desc {
+		padding:10px;
+		height: 250px;
+	}
+	#agent_desc_text {
+		padding: 4px 0 0 0;
+		height: 110px;
+	}
+</style>
+<div data-template-id="t3">
 <table cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; border: 0px solid #383838;">
 <tr>
 	<td>
 		<table cellpadding="2" cellspacing="0" border="0">
 			<tr>
 				<td style="width: 510px;">
-					<div data-editable="image" style="width: 510px; height: 300px; background-image:url(<?= $primary_photo_url ?>); background-size: cover">
-                    </div>
+					<div id="primary_photo" data-editable="image" style="background-image:url(<?= $primary_photo_url ?>);">
+					</div>
 				</td>
-				<td data-editable="background-color" style="width: 170px; background-color: #EEE;">
+				<td id="agent_detail" data-editable="background-color">
 					<div style="text-align: center;">
 						<?php if (IsValid::Url($profile_photo)) : ?>
 						<div style="padding: 10px;">
-						<div data-editable="image" style="margin-bottom: 20px;width: 150px; height: 150px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
+						<div id="agent_photo" style="background-image:url(<?= $profile_photo ?>);">
 						</div>
 						<?php endif ?>
 						<?php if (!empty($logo_url)) : ?>
@@ -52,7 +92,7 @@
 				</td>
 			</tr>
 		</table>
-		<div data-editable="background-color" style="background-color: #28A7AD; color: #FFF; font-size: <?= $bar_font_size ?>; font-weight: bold; padding: 10px;">
+		<div id="header" data-editable="background-color" style="font-size: <?= $bar_font_size ?>;">
 			<?= $display_price ?>
 			<span style="float: right;"><?= $full_address ?></span>
 		</div>
@@ -60,20 +100,20 @@
 			<tr>
 				<td style="width: 225px;">
 					<?php if (IsValid::Url($photo_data['p2']['url_small'])) : ?>
-					<div data-editable="image" style="width: 225px; height: 150px; background-image:url(<?= $photo_data['p2']['url_small'] ?>); background-size: cover">
-                    </div>
+					<div id="photo_left" data-editable="image" style="background-image:url(<?= $photo_data['p2']['url_small'] ?>);">
+					</div>
 					<?php endif ?>
 				</td>
 				<td style="width: 225px;">
 					<?php if (IsValid::Url($photo_data['p3']['url_small'])) : ?>
-					<div data-editable="image" style="width: 225px; height: 150px; background-image:url(<?= $photo_data['p3']['url_small'] ?>); background-size: cover">
-                                </div>
+					<div id="photo_center" data-editable="image" style="background-image:url(<?= $photo_data['p3']['url_small'] ?>);">
+					</div>
 					<?php endif ?>
 				</td>
 				<td style="width: 225px;">
 					<?php if (IsValid::Url($photo_data['p4']['url_small'])) : ?>
-					<div data-editable="image" style="width: 225px; height: 150px; background-image:url(<?= $photo_data['p4']['url_small'] ?>); background-size: cover">
-                    </div>
+					<div id="photo_right" data-editable="image" style="background-image:url(<?= $photo_data['p4']['url_small'] ?>);">
+					</div>
 					<?php endif ?>
 				</td>
 			</tr>
@@ -81,7 +121,7 @@
 	</td>
 </tr>
 <tr>
-	<td data-editable="background-color" style="padding:10px; height: 250px;">
+	<td id="agent_desc" data-editable="background-color font-color">
 		<?php if (!empty($all_features)) : ?>
 		<?php $num_elements = count($all_features); ?>
 		<table id="BasicDetails" cellpadding="4" cellspacing="0" border="0" style="margin: 0 auto;">
@@ -96,7 +136,7 @@
 		</table>
 		<?php endif // features ?>
 		
-		<div data-editable="text" style="padding: 4px 0 0 0; height: 110px;">
+		<div id="agent_desc_text" data-editable="text" data-character-limit=500>
 			<?php
 			$unbranded_desc = '';
 			if (strlen($myrow['agent_desc']) > 500)
@@ -121,10 +161,17 @@
 	</td>
 </tr>
 </table>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
+
+<link rel="stylesheet" href="css/colorpicker/colorpicker.css" type="text/css" />
+<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker/layout.css" />
+<script type="text/javascript" src="js/colorpicker/colorpicker.js"></script>
+<script type="text/javascript" src="js/colorpicker/eye.js"></script>
+<script type="text/javascript" src="js/colorpicker/utils.js"></script>
 
 <link rel="stylesheet" href="./plugin.css">
 <script src="./plugin.js"></script>
