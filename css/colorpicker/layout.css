@@ -2,7 +2,7 @@
 	margin:0;
 	padding:0;
 } */
-table {
+.colorpicker table {
 	border-collapse:collapse;
 	border-spacing:0;
 }
