@@ -105,7 +105,7 @@
 </tr>
 <tr>
 	<td id="agent_desc" data-editable="background-color font-color">
-		<div data-editable="text" style="height:110px" data-character-limit=500>
+		<div id="agent_desc_text" data-editable="text" style="height:110px" data-character-limit=500>
 			<?php
 			$unbranded_desc = '';
 			if (strlen($myrow['agent_desc']) > 500)
@@ -146,6 +146,7 @@
 	</td>
 </tr>
 </table>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
