@@ -48,7 +48,7 @@
 <table cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; border: 0px solid #383838;">
 <tr>
 	<td colspan="2">
-		<div id="header" data-editable="background-color">
+		<div id="header" data-editable="background-color font-color">
 			<?= $display_address.', '.$myrow['city'].', '.$myrow['state'].' '.$myrow['zip']; ?>
 			<span style="float: right; font-size: 14pt;">#<?= $myrow['mlsid'] ?></span>
 		</div>

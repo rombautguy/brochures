@@ -12,10 +12,40 @@
 	$display_price = "$235,000";
 	$status_text = "Active for Sale";
 ?>
+<style>
+	#header {
+		padding: 5px;
+	}
+	#primary_photo {
+		width: 510px;
+		height: 300px;
+		background-size: cover;
+	}
+	#agent_desc {
+		height:215px;
+		padding:10px;
+	}
+	#agent_detail {
+	}
+	#agent_photo {
+		margin-bottom: 20px;
+		width: 150px;
+		height: 150px;
+		border-radius: 100%;
+		background-size: cover;
+	}
+	#left_photo,
+	#right_photo {
+		width: 340px;
+		height: 200px;
+		background-size: cover;
+	}
+</style>
+<div data-template-id="t2">
 <table cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; border: 0px solid #383838;">
 <tr>
-	<td data-editable="background-color" style="padding: 5px;">
-		<div style="text-align: left; font-size: 18pt; font-weight: bold; color: #333; margin: 0 0 4px 0;">
+	<td id="header" data-editable="background-color font-color">
+		<div style="text-align: left; font-size: 18pt; font-weight: bold; margin: 0 0 4px 0;">
 			<?= $display_address.', '.$myrow['city'].', '.$myrow['state'].' '.$myrow['zip']; ?>
 			<span style="float: right; font-size: 14pt;">#<?= $myrow['mlsid'] ?></span>
 		</div>
@@ -30,14 +60,14 @@
 		<table cellpadding="2" cellspacing="0" border="0">
 			<tr>
 				<td style="width: 510px;">
-                    <div data-editable="image" style="width: 510px; height: 300px; background-image:url(<?= $primary_photo_url ?>); background-size: cover">
-                    </div>
+					<div id="primary_photo" data-editable="image" style="background-image:url(<?= $primary_photo_url ?>);">
+					</div>
 				</td>
-				<td data-editable="background-color" style="width: 170px; background-color: #EEE;">
+				<td id="agent_detail" data-editable="background-color">
 					<div style="text-align: center;">
 						<?php if (IsValid::Url($profile_photo)) : ?>
 						<div style="padding: 10px;">
-						<div data-editable="image" style="margin-bottom: 20px;width: 150px; height: 150px; border-radius: 100%; background-image:url(<?= $profile_photo ?>); background-size: cover">
+						<div id="agent_photo" style="background-image:url(<?= $profile_photo ?>);">
 						</div>
 						<?php endif ?>
 						<?php if (!empty($logo_url)) : ?>
@@ -59,14 +89,14 @@
 			<tr>
 				<td style="width: 340px;">
 					<?php if (IsValid::Url($photo_data['p2']['url_small'])) : ?>
-					<div data-editable="image" style="width: 340px; height: 200px; background-image:url(<?= $photo_data['p2']['url_small'] ?>); background-size: cover">
-                    </div>
+					<div id="left_photo" data-editable="image" style="background-image:url(<?= $photo_data['p2']['url_small'] ?>);">
+					</div>
 					<?php endif ?>
 				</td>
 				<td style="width: 340px;">
 					<?php if (IsValid::Url($photo_data['p3']['url_small'])) : ?>
-					<div data-editable="image" style="width: 340px; height: 200px; background-image:url(<?= $photo_data['p3']['url_small'] ?>); background-size: cover">
-                    </div>
+					<div id="right_photo" data-editable="image" style="background-image:url(<?= $photo_data['p3']['url_small'] ?>);">
+					</div>
 					<?php endif ?>
 				</td>
 			</tr>
@@ -74,13 +104,13 @@
 	</td>
 </tr>
 <tr>
-	<td data-editable="background-color" style="height:215px; padding:10px;">
-		<div data-editable="text" style="height:110px">
+	<td id="agent_desc" data-editable="background-color font-color">
+		<div data-editable="text" style="height:110px" data-character-limit=500>
 			<?php
 			$unbranded_desc = '';
-			if (strlen($myrow['agent_desc']) > 600)
+			if (strlen($myrow['agent_desc']) > 500)
 			{
-				$unbranded_desc = substr($myrow['agent_desc'], 0, 600);
+				$unbranded_desc = substr($myrow['agent_desc'], 0, 500);
 				$dot_pos = strrpos($unbranded_desc, '.');
 				$unbranded_desc = substr($unbranded_desc, 0, $dot_pos+1);
 			}
@@ -120,6 +150,12 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
+
+<link rel="stylesheet" href="css/colorpicker/colorpicker.css" type="text/css" />
+<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker/layout.css" />
+<script type="text/javascript" src="js/colorpicker/colorpicker.js"></script>
+<script type="text/javascript" src="js/colorpicker/eye.js"></script>
+<script type="text/javascript" src="js/colorpicker/utils.js"></script>
 
 <link rel="stylesheet" href="./plugin.css">
 <script src="./plugin.js"></script>
